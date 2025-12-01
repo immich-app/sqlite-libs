@@ -16,3 +16,38 @@ This repository bundles a custom SQLite build for use as a dependency in iOS and
 - SQLiteData (Swift query builder, built on GRDB)
 
 The dependencies are prepared via `scripts/setup.sh`, which downloads and organizes the relevant source code and adds a few shims.
+
+## Installation
+
+### Flutter (Drift)
+```yaml
+dependency_overrides:
+  sqlite3_flutter_libs:
+    git:
+      url: https://github.com/immich-app/sqlite-libs
+      path: flutter
+      ref: <version>
+```
+
+### Android (Room/Gradle)
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+dependencies {
+    implementation 'com.github.immich-app.sqlite-libs:sqlite-android:<version>'
+}
+```
+
+To use with Room:
+```kotlin
+Room.databaseBuilder(context, AppDatabase::class.java, "db")
+    .openHelperFactory(RequerySQLiteOpenHelperFactory())
+    .build()
+```
+
+### iOS (Swift Package Manager)
+Add to your `Package.swift` or Xcode project:
+```
+https://github.com/immich-app/sqlite-libs @ <version>
+```

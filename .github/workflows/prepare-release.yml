@@ -100,31 +100,3 @@ jobs:
           tag_name: v${{ steps.new-version.outputs.version }}
           token: ${{ steps.generate-token.outputs.token }}
           generate_release_notes: true
-          body: |
-            ## Installation
-
-            ### Flutter (Drift)
-            ```yaml
-            dependency_overrides:
-              sqlite3_flutter_libs:
-                git:
-                  url: https://github.com/${{ github.repository }}
-                  path: flutter
-                  ref: v${{ steps.new-version.outputs.version }}
-            ```
-
-            ### Android (Room/Gradle)
-            ```groovy
-            repositories {
-                maven { url 'https://jitpack.io' }
-            }
-            dependencies {
-                implementation 'com.github.${{ github.repository_owner }}.sqlite-libs:sqlite-android:v${{ steps.new-version.outputs.version }}'
-            }
-            ```
-
-            ### iOS (Swift Package Manager)
-            Add to your `Package.swift` or Xcode project:
-            ```
-            https://github.com/${{ github.repository }} @ v${{ steps.new-version.outputs.version }}
-            ```
