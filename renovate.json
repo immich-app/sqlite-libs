@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": ["GRDB_VERSION=\"\\$\\{GRDB_VERSION:-(?<currentValue>v[^\"]+)\\}\""],
+      "depNameTemplate": "groue/GRDB.swift",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": ["SQLITEDATA_VERSION=\"\\$\\{SQLITEDATA_VERSION:-(?<currentValue>[^\"]+)\\}\""],
+      "depNameTemplate": "pointfreeco/sqlite-data",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": ["USEARCH_VERSION=\"\\$\\{USEARCH_VERSION:-(?<currentValue>v[^\"]+)\\}\""],
+      "depNameTemplate": "unum-cloud/USearch",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": ["SQLEAN_VERSION=\"\\$\\{SQLEAN_VERSION:-(?<currentValue>[^\"]+)\\}\""],
+      "depNameTemplate": "nalgeon/sqlean",
+      "datasourceTemplate": "github-releases"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["regex"],
+      "groupName": "vendored dependencies",
+      "schedule": ["before 9am on monday"]
+    }
+  ]
+}
