@@ -5,30 +5,34 @@
     {
       "customType": "regex",
       "fileMatch": ["^scripts/setup\\.sh$"],
-      "matchStrings": ["GRDB_VERSION=\"\\$\\{GRDB_VERSION:-(?<currentValue>v[^\"]+)\\}\""],
-      "depNameTemplate": "groue/GRDB.swift",
-      "datasourceTemplate": "github-releases"
+      "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nGRDB_COMMIT=\"\\$\\{GRDB_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
     },
     {
       "customType": "regex",
       "fileMatch": ["^scripts/setup\\.sh$"],
-      "matchStrings": ["SQLITEDATA_VERSION=\"\\$\\{SQLITEDATA_VERSION:-(?<currentValue>[^\"]+)\\}\""],
-      "depNameTemplate": "pointfreeco/sqlite-data",
-      "datasourceTemplate": "github-releases"
+      "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nSQLITEDATA_COMMIT=\"\\$\\{SQLITEDATA_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
     },
     {
       "customType": "regex",
       "fileMatch": ["^scripts/setup\\.sh$"],
-      "matchStrings": ["USEARCH_VERSION=\"\\$\\{USEARCH_VERSION:-(?<currentValue>v[^\"]+)\\}\""],
-      "depNameTemplate": "unum-cloud/USearch",
-      "datasourceTemplate": "github-releases"
+      "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nUSEARCH_COMMIT=\"\\$\\{USEARCH_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
     },
     {
       "customType": "regex",
       "fileMatch": ["^scripts/setup\\.sh$"],
-      "matchStrings": ["SQLEAN_VERSION=\"\\$\\{SQLEAN_VERSION:-(?<currentValue>[^\"]+)\\}\""],
-      "depNameTemplate": "nalgeon/sqlean",
-      "datasourceTemplate": "github-releases"
+      "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nSQLEAN_COMMIT=\"\\$\\{SQLEAN_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
     }
   ],
   "packageRules": [

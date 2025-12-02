@@ -2,13 +2,21 @@
 
 set -eu
 
-GRDB_VERSION="${GRDB_VERSION:-v7.8.0}"
+# renovate: datasource=github-tags depName=groue/GRDB.swift
+GRDB_COMMIT="${GRDB_COMMIT:-18497b68fdbb3a09528d260a0a0e1e7e61c8c53d}" # v7.8.0
+
 SQLITE_VERSION="${SQLITE_VERSION:-3510100}"
 SQLITE_YEAR="${SQLITE_YEAR:-2025}"
 SQLITE_SHA3="${SQLITE_SHA3:-856b52ffe7383d779bb86a0ed1ddc19c41b0e5751fa14ce6312f27534e629b64}"
-SQLITEDATA_VERSION="${SQLITEDATA_VERSION:-1.3.0}"
-USEARCH_VERSION="${USEARCH_VERSION:-v2.21.3}"
-SQLEAN_VERSION="${SQLEAN_VERSION:-0.27.1}"
+
+# renovate: datasource=github-tags depName=pointfreeco/sqlite-data
+SQLITEDATA_COMMIT="${SQLITEDATA_COMMIT:-b66b894b9a5710f1072c8eb6448a7edfc2d743d9}" # 1.3.0
+
+# renovate: datasource=github-tags depName=unum-cloud/USearch
+USEARCH_COMMIT="${USEARCH_COMMIT:-aaf4949515d30f5f466e65f8f29316db84a59541}" # v2.21.3
+
+# renovate: datasource=github-tags depName=nalgeon/sqlean
+SQLEAN_COMMIT="${SQLEAN_COMMIT:-94d8934683ee079a3e8639a7d8445f8b1ea52e36}" # 0.27.1
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -21,11 +29,11 @@ if [ ! -d "${TEMPLATES_DIR}" ]; then
 fi
 
 echo "Creating GRDB + SQLiteData package..."
-echo "  GRDB: ${GRDB_VERSION}"
+echo "  GRDB: ${GRDB_COMMIT}"
 echo "  SQLite: ${SQLITE_VERSION}"
-echo "  SQLiteData: ${SQLITEDATA_VERSION}"
-echo "  USearch: ${USEARCH_VERSION}"
-echo "  SQLean: ${SQLEAN_VERSION}"
+echo "  SQLiteData: ${SQLITEDATA_COMMIT}"
+echo "  USearch: ${USEARCH_COMMIT}"
+echo "  SQLean: ${SQLEAN_COMMIT}"
 
 rm -rf "${OUTPUT_DIR}/Sources"
 mkdir -p "${OUTPUT_DIR}/Sources"/{GRDB,SQLiteCustom,SQLiteData,SQLiteExtensions/include,SQLiteExtensions/sqlean}
@@ -36,7 +44,7 @@ TEMP=$(mktemp -d)
 trap "rm -rf ${TEMP}" EXIT
 
 echo "Downloading GRDB..."
-curl -sL "https://github.com/groue/GRDB.swift/archive/refs/tags/${GRDB_VERSION}.tar.gz" \
+curl -sL "https://github.com/groue/GRDB.swift/archive/${GRDB_COMMIT}.tar.gz" \
     | tar -xz -C "${TEMP}"
 cp -R "${TEMP}"/GRDB.swift-*/GRDB/. Sources/GRDB/
 cp "${TEMP}"/GRDB.swift-*/LICENSE Sources/GRDB/LICENSE
@@ -53,15 +61,18 @@ cp "${SQLITE_DIR}/sqlite3.h" Sources/SQLiteCustom/
 cp "${SQLITE_DIR}/sqlite3ext.h" Sources/SQLiteCustom/
 
 echo "Downloading SQLiteData..."
-curl -sL "https://github.com/pointfreeco/sqlite-data/archive/refs/tags/${SQLITEDATA_VERSION}.tar.gz" \
+curl -sL "https://github.com/pointfreeco/sqlite-data/archive/${SQLITEDATA_COMMIT}.tar.gz" \
     | tar -xz -C "${TEMP}"
 cp -R "${TEMP}"/sqlite-data-*/Sources/SQLiteData/. Sources/SQLiteData/
 cp "${TEMP}"/sqlite-data-*/LICENSE Sources/SQLiteData/LICENSE
 rm -rf Sources/SQLiteData/CloudKit Sources/SQLiteData/Documentation.docc 2>/dev/null || true
 
 echo "Downloading USearch..."
-git clone --quiet --depth 1 --branch "${USEARCH_VERSION}" --recursive --shallow-submodules \
+git clone --quiet --depth 1 --recursive --shallow-submodules \
     https://github.com/unum-cloud/USearch.git "${TEMP}/usearch"
+git -C "${TEMP}/usearch" fetch --quiet --depth 1 origin "${USEARCH_COMMIT}"
+git -C "${TEMP}/usearch" checkout --quiet "${USEARCH_COMMIT}"
+git -C "${TEMP}/usearch" submodule update --quiet --recursive
 cp "${TEMP}/usearch/include/usearch/"*.hpp Sources/SQLiteExtensions/usearch/include/usearch/
 cp "${TEMP}/usearch/sqlite/lib.cpp" Sources/SQLiteExtensions/usearch/
 cp "${TEMP}/usearch/LICENSE" Sources/SQLiteExtensions/usearch/LICENSE
@@ -75,7 +86,7 @@ cp "${TEMP}/usearch/fp16/include/fp16/"*.h Sources/SQLiteExtensions/usearch/fp16
 cp "${TEMP}/usearch/fp16/LICENSE" Sources/SQLiteExtensions/usearch/fp16/LICENSE
 
 echo "Downloading SQLean..."
-curl -sL "https://github.com/nalgeon/sqlean/archive/refs/tags/${SQLEAN_VERSION}.tar.gz" \
+curl -sL "https://github.com/nalgeon/sqlean/archive/${SQLEAN_COMMIT}.tar.gz" \
     | tar -xz -C "${TEMP}"
 cp "${TEMP}"/sqlean-*/src/sqlean.h Sources/SQLiteExtensions/sqlean/
 cp "${TEMP}"/sqlean-*/src/sqlite3-uuid.c Sources/SQLiteExtensions/sqlean/
