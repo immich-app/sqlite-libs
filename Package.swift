@@ -64,6 +64,8 @@ let package = Package(
                 .define("SQLITE_CORE"),
                 .define("SQLITE_DEFAULT_CACHE_SIZE", to: "10000"),
                 .define("SQLITE_DEFAULT_WAL_SYNCHRONOUS"),
+                .define("SQLITE_DEFAULT_BUSY_TIMEOUT", to: "30000"),
+                .define("SQLITE_DEFAULT_FOREIGN_KEYS", to: "1"),
                 .define("SQLITE_ENABLE_PERCENTILE"),
                 .define("SQLITE_ENABLE_MATH_FUNCTIONS"),
                 .define("SQLITE_UNTESTABLE"),
