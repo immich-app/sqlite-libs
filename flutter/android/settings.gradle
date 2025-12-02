@@ -1,0 +1,8 @@
+rootProject.name = 'sqlite3_flutter_libs'
+
+// Include the sqlite-android module from the parent project
+def sqliteAndroidPath = file('../sqlite-android-custom/sqlite-android')
+if (sqliteAndroidPath.exists()) {
+    include ':sqlite-android'
+    project(':sqlite-android').projectDir = sqliteAndroidPath
+}
