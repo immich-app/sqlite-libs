@@ -58,6 +58,7 @@ let package = Package(
                 .define("SQLITE_HAVE_STRCHRNUL"),
                 .define("SQLITE_ENABLE_GEOPOLY"),
                 .define("SQLITE_ENABLE_DBSTAT_VTAB"),
+                .define("SQLITE_ENABLE_CARRAY"),
                 .define("SQLITE_STAT4_SAMPLES", to: "64"),
                 .define("NDEBUG", .when(configuration: .release)),
                 .unsafeFlags(["-Wno-ambiguous-macro", "-O3"]),
