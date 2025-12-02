@@ -2,12 +2,12 @@
 
 set -eu
 
-# renovate: datasource=github-tags depName=groue/GRDB.swift
-GRDB_COMMIT="${GRDB_COMMIT:-18497b68fdbb3a09528d260a0a0e1e7e61c8c53d}" # v7.8.0
-
 SQLITE_VERSION="${SQLITE_VERSION:-3510100}"
 SQLITE_YEAR="${SQLITE_YEAR:-2025}"
 SQLITE_SHA3="${SQLITE_SHA3:-856b52ffe7383d779bb86a0ed1ddc19c41b0e5751fa14ce6312f27534e629b64}"
+
+# renovate: datasource=github-tags depName=groue/GRDB.swift
+GRDB_COMMIT="${GRDB_COMMIT:-18497b68fdbb3a09528d260a0a0e1e7e61c8c53d}" # v7.8.0
 
 # renovate: datasource=github-tags depName=pointfreeco/sqlite-data
 SQLITEDATA_COMMIT="${SQLITEDATA_COMMIT:-b66b894b9a5710f1072c8eb6448a7edfc2d743d9}" # 1.3.0
