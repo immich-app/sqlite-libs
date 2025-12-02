@@ -2,6 +2,7 @@
 
 set -eu
 
+SQLITE_TAG="${SQLITE_TAG:-3.51.1}"
 SQLITE_VERSION="${SQLITE_VERSION:-3510100}"
 SQLITE_YEAR="${SQLITE_YEAR:-2025}"
 SQLITE_SHA3="${SQLITE_SHA3:-856b52ffe7383d779bb86a0ed1ddc19c41b0e5751fa14ce6312f27534e629b64}"
@@ -59,6 +60,10 @@ SQLITE_DIR=$(find "${TEMP}" -type d -name "sqlite-amalgamation-*" | head -1)
 cp "${SQLITE_DIR}/sqlite3.c" Sources/SQLiteCustom/
 cp "${SQLITE_DIR}/sqlite3.h" Sources/SQLiteCustom/
 cp "${SQLITE_DIR}/sqlite3ext.h" Sources/SQLiteCustom/
+
+echo "Downloading SQLite series extension..."
+curl -sL "https://www.sqlite.org/src/raw/ext/misc/series.c?ci=${SQLITE_TAG}" \
+    -o Sources/SQLiteExtensions/series.c
 
 echo "Downloading SQLiteData..."
 curl -sL "https://github.com/pointfreeco/sqlite-data/archive/${SQLITEDATA_COMMIT}.tar.gz" \

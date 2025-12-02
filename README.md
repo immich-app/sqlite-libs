@@ -10,6 +10,7 @@ This repository bundles a custom SQLite build for use as a dependency in iOS and
   - percentile
   - geopoly
   - carray
+  - series
 - USearch vector extension (SIMD vector search and various distance metrics)
 - SQLean's uuid extension (native UUID support, including UUIDv7)
 - SQLean's text extension (QoL helpers that exist in PostgreSQL)

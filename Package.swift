@@ -90,6 +90,7 @@ let package = Package(
             ],
             sources: [
                 "initialize-extensions.c",
+                "series.c",
                 "sqlean/sqlite3-uuid.c",
                 "sqlean/uuid/extension.c",
                 "sqlean/sqlite3-text.c",

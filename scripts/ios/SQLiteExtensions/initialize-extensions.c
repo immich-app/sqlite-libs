@@ -8,9 +8,13 @@ extern int sqlite3_usearchsqlite_init(sqlite3*, char**, const void*);
 extern int sqlite3_uuid_init(sqlite3*, char**, const void*);
 extern int sqlite3_text_init(sqlite3*, char**, const void*);
 
+// SQLite series extension entry point
+extern int sqlite3_series_init(sqlite3*, char**, const void*);
+
 int initialize_sqlite3_extensions(void) {
     sqlite3_auto_extension((void (*)(void))sqlite3_usearchsqlite_init);
     sqlite3_auto_extension((void (*)(void))sqlite3_uuid_init);
     sqlite3_auto_extension((void (*)(void))sqlite3_text_init);
+    sqlite3_auto_extension((void (*)(void))sqlite3_series_init);
     return 0;
 }

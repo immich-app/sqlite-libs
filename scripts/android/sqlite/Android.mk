@@ -78,6 +78,7 @@ LOCAL_SRC_FILES := \
 	JNIHelp.cpp \
 	JNIString.cpp \
 	sqlite3.c \
+	series.c \
 	../usearch/lib.cpp \
 	../sqlean/sqlite3-uuid.c \
 	../sqlean/uuid/extension.c \

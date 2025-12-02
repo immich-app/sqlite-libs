@@ -48,6 +48,10 @@ rm -rf "$SQLEAN_DIR"
 mkdir -p "$SQLEAN_DIR"
 cp -r "$ROOT_DIR/Sources/SQLiteExtensions/sqlean/"* "$SQLEAN_DIR/"
 
+# Copy SQLite series extension
+echo "Copying series extension..."
+cp "$ROOT_DIR/Sources/SQLiteExtensions/series.c" "$SQLITE_DIR/"
+
 # Patch SQLean uuid for Android (timespec_get is not available in Bionic libc)
 echo "Patching SQLean uuid for Android..."
 UUID_EXT="$SQLEAN_DIR/uuid/extension.c"
@@ -76,6 +80,9 @@ else
         print "// SQLean extension init functions (defined in sqlean/)"
         print "extern \"C\" int sqlite3_uuid_init(sqlite3*, char**, const sqlite3_api_routines*);"
         print "extern \"C\" int sqlite3_text_init(sqlite3*, char**, const sqlite3_api_routines*);"
+        print ""
+        print "// SQLite series extension init function (defined in series.c)"
+        print "extern \"C\" int sqlite3_series_init(sqlite3*, char**, const sqlite3_api_routines*);"
         next
     }
     /android::gpJavaVM = vm;/ {
@@ -87,6 +94,7 @@ else
         print "  sqlite3_auto_extension((void(*)(void))sqlite3_usearch_sqlite_init);"
         print "  sqlite3_auto_extension((void(*)(void))sqlite3_uuid_init);"
         print "  sqlite3_auto_extension((void(*)(void))sqlite3_text_init);"
+        print "  sqlite3_auto_extension((void(*)(void))sqlite3_series_init);"
         next
     }
     { print }
