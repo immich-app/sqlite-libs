@@ -35,7 +35,7 @@ echo "  USearch: ${USEARCH_COMMIT}"
 echo "  SQLean: ${SQLEAN_COMMIT}"
 
 rm -rf "${OUTPUT_DIR}/Sources"
-mkdir -p "${OUTPUT_DIR}/Sources"/{GRDB,SQLiteCustom,SQLiteData,SQLiteExtensions/include,SQLiteExtensions/sqlean}
+mkdir -p "${OUTPUT_DIR}/Sources"/{GRDB,SQLiteCustom/include,SQLiteData,SQLiteExtensions/include}
 mkdir -p "${OUTPUT_DIR}/Sources"/SQLiteExtensions/usearch/{include/usearch,stringzilla/include/stringzilla,stringzilla/c,simsimd/include/simsimd,fp16/include/fp16}
 cd "${OUTPUT_DIR}"
 
@@ -52,11 +52,11 @@ echo "Building SQLite amalgamation..."
 curl -sL "https://github.com/sqlite/sqlite/archive/${SQLITE_COMMIT}.tar.gz" \
     | tar -xz -C "${TEMP}"
 SQLITE_SRC="${TEMP}/sqlite-${SQLITE_COMMIT}"
-(cd "${SQLITE_SRC}" && ./configure --quiet && make -j sqlite3.c)
+(cd "${SQLITE_SRC}" && ./configure --quiet --enable-update-limit && make -j sqlite3.c)
 cp "${SQLITE_SRC}/sqlite3.c" Sources/SQLiteCustom/
-cp "${SQLITE_SRC}/sqlite3.h" Sources/SQLiteCustom/
-cp "${SQLITE_SRC}/sqlite3ext.h" Sources/SQLiteCustom/
-cp "${SQLITE_SRC}/ext/misc/series.c" Sources/SQLiteExtensions/
+cp "${SQLITE_SRC}/sqlite3.h" Sources/SQLiteCustom/include/
+cp "${SQLITE_SRC}/sqlite3ext.h" Sources/SQLiteCustom/include/
+cp "${SQLITE_SRC}/ext/misc/series.c" Sources/SQLiteCustom/
 
 echo "Downloading SQLiteData..."
 curl -sL "https://github.com/pointfreeco/sqlite-data/archive/${SQLITEDATA_COMMIT}.tar.gz" \
@@ -86,15 +86,16 @@ cp "${TEMP}/usearch/fp16/LICENSE" Sources/SQLiteExtensions/usearch/fp16/LICENSE
 echo "Downloading SQLean..."
 curl -sL "https://github.com/nalgeon/sqlean/archive/${SQLEAN_COMMIT}.tar.gz" \
     | tar -xz -C "${TEMP}"
-cp "${TEMP}"/sqlean-*/src/sqlean.h Sources/SQLiteExtensions/sqlean/
-cp "${TEMP}"/sqlean-*/src/sqlite3-uuid.c Sources/SQLiteExtensions/sqlean/
-cp -R "${TEMP}"/sqlean-*/src/uuid Sources/SQLiteExtensions/sqlean/
-cp "${TEMP}"/sqlean-*/src/sqlite3-text.c Sources/SQLiteExtensions/sqlean/
-cp -R "${TEMP}"/sqlean-*/src/text Sources/SQLiteExtensions/sqlean/
-cp "${TEMP}"/sqlean-*/LICENSE Sources/SQLiteExtensions/sqlean/LICENSE
+mkdir -p Sources/SQLiteCustom/sqlean
+cp "${TEMP}"/sqlean-*/src/sqlean.h Sources/SQLiteCustom/sqlean/
+cp "${TEMP}"/sqlean-*/src/sqlite3-uuid.c Sources/SQLiteCustom/sqlean/
+cp -R "${TEMP}"/sqlean-*/src/uuid Sources/SQLiteCustom/sqlean/
+cp "${TEMP}"/sqlean-*/src/sqlite3-text.c Sources/SQLiteCustom/sqlean/
+cp -R "${TEMP}"/sqlean-*/src/text Sources/SQLiteCustom/sqlean/
+cp "${TEMP}"/sqlean-*/LICENSE Sources/SQLiteCustom/sqlean/LICENSE
 
-cp "${TEMPLATES_DIR}/shim.h" Sources/SQLiteCustom/
-cp "${TEMPLATES_DIR}/GRDBSQLite.h" Sources/SQLiteCustom/
+cp "${TEMPLATES_DIR}/shim.h" Sources/SQLiteCustom/include/
+cp "${TEMPLATES_DIR}/GRDBSQLite.h" Sources/SQLiteCustom/include/
 cp "${TEMPLATES_DIR}/SQLiteExtensions/initialize-extensions.c" Sources/SQLiteExtensions/
 cp "${TEMPLATES_DIR}/SQLiteExtensions/include/initialize-extensions.h" Sources/SQLiteExtensions/include/
 

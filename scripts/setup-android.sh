@@ -28,8 +28,8 @@ SQLEAN_DIR="$JNI_DIR/sqlean"
 # Copy SQLite source files
 echo "Copying SQLite source files..."
 cp "$ROOT_DIR/Sources/SQLiteCustom/sqlite3.c" "$SQLITE_DIR/"
-cp "$ROOT_DIR/Sources/SQLiteCustom/sqlite3.h" "$SQLITE_DIR/"
-cp "$ROOT_DIR/Sources/SQLiteCustom/sqlite3ext.h" "$SQLITE_DIR/"
+cp "$ROOT_DIR/Sources/SQLiteCustom/include/sqlite3.h" "$SQLITE_DIR/"
+cp "$ROOT_DIR/Sources/SQLiteCustom/include/sqlite3ext.h" "$SQLITE_DIR/"
 
 # Copy USearch extension
 echo "Copying USearch extension..."
@@ -46,11 +46,11 @@ cp "$ROOT_DIR/Sources/SQLiteExtensions/usearch/LICENSE" "$USEARCH_DIR/"
 echo "Copying SQLean extensions..."
 rm -rf "$SQLEAN_DIR"
 mkdir -p "$SQLEAN_DIR"
-cp -r "$ROOT_DIR/Sources/SQLiteExtensions/sqlean/"* "$SQLEAN_DIR/"
+cp -r "$ROOT_DIR/Sources/SQLiteCustom/sqlean/"* "$SQLEAN_DIR/"
 
 # Copy SQLite series extension
 echo "Copying series extension..."
-cp "$ROOT_DIR/Sources/SQLiteExtensions/series.c" "$SQLITE_DIR/"
+cp "$ROOT_DIR/Sources/SQLiteCustom/series.c" "$SQLITE_DIR/"
 
 # Patch SQLean uuid for Android (timespec_get is not available in Bionic libc)
 echo "Patching SQLean uuid for Android..."
@@ -62,45 +62,7 @@ echo "Copying build configuration files..."
 cp "$TEMPLATE_DIR/Application.mk" "$JNI_DIR/"
 cp "$TEMPLATE_DIR/Android.mk" "$JNI_DIR/"
 cp "$TEMPLATE_DIR/sqlite/Android.mk" "$SQLITE_DIR/"
-
-# Patch android_database_SQLiteConnection.cpp to register extensions
-echo "Patching SQLiteConnection for extensions..."
-CONNECTION_FILE="$SQLITE_DIR/android_database_SQLiteConnection.cpp"
-
-if grep -q "sqlite3_usearch_sqlite_init" "$CONNECTION_FILE"; then
-    echo "  Already patched"
-else
-    awk '
-    /^} \/\/ namespace android/ {
-        print
-        print ""
-        print "// USearch extension init function (defined in usearch/lib.cpp)"
-        print "extern \"C\" int sqlite3_usearch_sqlite_init(sqlite3*, char**, const sqlite3_api_routines*);"
-        print ""
-        print "// SQLean extension init functions (defined in sqlean/)"
-        print "extern \"C\" int sqlite3_uuid_init(sqlite3*, char**, const sqlite3_api_routines*);"
-        print "extern \"C\" int sqlite3_text_init(sqlite3*, char**, const sqlite3_api_routines*);"
-        print ""
-        print "// SQLite series extension init function (defined in series.c)"
-        print "extern \"C\" int sqlite3_series_init(sqlite3*, char**, const sqlite3_api_routines*);"
-        next
-    }
-    /android::gpJavaVM = vm;/ {
-        print
-        getline
-        print
-        print ""
-        print "  // Register extensions to be auto-loaded for all connections"
-        print "  sqlite3_auto_extension((void(*)(void))sqlite3_usearch_sqlite_init);"
-        print "  sqlite3_auto_extension((void(*)(void))sqlite3_uuid_init);"
-        print "  sqlite3_auto_extension((void(*)(void))sqlite3_text_init);"
-        print "  sqlite3_auto_extension((void(*)(void))sqlite3_series_init);"
-        next
-    }
-    { print }
-    ' "$CONNECTION_FILE" > "$CONNECTION_FILE.tmp" && mv "$CONNECTION_FILE.tmp" "$CONNECTION_FILE"
-    echo "  Patched successfully"
-fi
+cp "$TEMPLATE_DIR/sqlite/sqlite_extensions_init.c" "$SQLITE_DIR/"
 
 # Patch library name from sqlite3x to sqlite3
 echo "Patching library name..."

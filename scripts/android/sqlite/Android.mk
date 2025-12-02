@@ -8,6 +8,7 @@ include $(CLEAR_VARS)
 #   - SQLITE_OMIT_DEPRECATED: removed (sqlite3_trace/profile are deprecated)
 sqlite_flags := \
 	-DNDEBUG=1 \
+	-DSQLITE_EXTRA_INIT_MUTEXED=sqlite_extensions_init \
 	-DSQLITE_ENABLE_SNAPSHOT \
 	-DSQLITE_ENABLE_FTS5 \
 	-DSQLITE_ENABLE_PREUPDATE_HOOK \
@@ -78,6 +79,7 @@ LOCAL_SRC_FILES := \
 	JNIHelp.cpp \
 	JNIString.cpp \
 	sqlite3.c \
+	sqlite_extensions_init.c \
 	series.c \
 	../usearch/lib.cpp \
 	../sqlean/sqlite3-uuid.c \
