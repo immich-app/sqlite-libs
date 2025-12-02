@@ -48,6 +48,11 @@ rm -rf "$SQLEAN_DIR"
 mkdir -p "$SQLEAN_DIR"
 cp -r "$ROOT_DIR/Sources/SQLiteExtensions/sqlean/"* "$SQLEAN_DIR/"
 
+# Patch SQLean uuid for Android (timespec_get is not available in Bionic libc)
+echo "Patching SQLean uuid for Android..."
+UUID_EXT="$SQLEAN_DIR/uuid/extension.c"
+sed -i.bak 's/timespec_get(&ts, TIME_UTC)/clock_gettime(CLOCK_REALTIME, \&ts)/' "$UUID_EXT" && rm "$UUID_EXT.bak"
+
 # Copy build configuration files from templates
 echo "Copying build configuration files..."
 cp "$TEMPLATE_DIR/Application.mk" "$JNI_DIR/"
