@@ -92,6 +92,9 @@ jobs:
         run: |
           sed -i "s|sqlite-libs:sqlite-android:v[0-9.]*|sqlite-libs:sqlite-android:v$NEW_VERSION|" flutter/android/build.gradle
 
+      - name: Install Tcl
+        run: sudo apt-get install -y tcl
+
       - name: Setup sources
         run: scripts/setup.sh
 

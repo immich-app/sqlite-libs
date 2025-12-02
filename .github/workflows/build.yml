@@ -33,6 +33,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
+      - name: Install Tcl
+        run: sudo apt-get install -y tcl
+
       - name: Setup sources
         run: scripts/setup.sh
 
@@ -62,6 +65,9 @@ jobs:
           path: .build
           key: ${{ runner.os }}-swiftpm-${{ hashFiles('Package.resolved') }}
           restore-keys: ${{ runner.os }}-swiftpm-
+
+      - name: Install Tcl
+        run: brew install tcl-tk
 
       - name: Setup sources
         run: scripts/setup.sh

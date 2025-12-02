@@ -2,10 +2,8 @@
 
 set -eu
 
-SQLITE_TAG="${SQLITE_TAG:-3.51.1}"
-SQLITE_VERSION="${SQLITE_VERSION:-3510100}"
-SQLITE_YEAR="${SQLITE_YEAR:-2025}"
-SQLITE_SHA3="${SQLITE_SHA3:-856b52ffe7383d779bb86a0ed1ddc19c41b0e5751fa14ce6312f27534e629b64}"
+# renovate: datasource=github-tags depName=sqlite/sqlite
+SQLITE_COMMIT="${SQLITE_COMMIT:-a1de06a4c639a5d741b2b424e5dfea45eaa30e70}" # version-3.51.1
 
 # renovate: datasource=github-tags depName=groue/GRDB.swift
 GRDB_COMMIT="${GRDB_COMMIT:-18497b68fdbb3a09528d260a0a0e1e7e61c8c53d}" # v7.8.0
@@ -30,8 +28,8 @@ if [ ! -d "${TEMPLATES_DIR}" ]; then
 fi
 
 echo "Creating GRDB + SQLiteData package..."
+echo "  SQLite: ${SQLITE_COMMIT}"
 echo "  GRDB: ${GRDB_COMMIT}"
-echo "  SQLite: ${SQLITE_VERSION}"
 echo "  SQLiteData: ${SQLITEDATA_COMMIT}"
 echo "  USearch: ${USEARCH_COMMIT}"
 echo "  SQLean: ${SQLEAN_COMMIT}"
@@ -50,20 +48,15 @@ curl -sL "https://github.com/groue/GRDB.swift/archive/${GRDB_COMMIT}.tar.gz" \
 cp -R "${TEMP}"/GRDB.swift-*/GRDB/. Sources/GRDB/
 cp "${TEMP}"/GRDB.swift-*/LICENSE Sources/GRDB/LICENSE
 
-echo "Downloading SQLite..."
-curl -sL "https://www.sqlite.org/${SQLITE_YEAR}/sqlite-amalgamation-${SQLITE_VERSION}.zip" \
-    -o "${TEMP}/sqlite.zip"
-openssl dgst -sha3-256 "${TEMP}/sqlite.zip" | grep -q "${SQLITE_SHA3}" \
-    || { echo "Error: SQLite SHA3-256 mismatch!"; exit 1; }
-unzip -q "${TEMP}/sqlite.zip" -d "${TEMP}"
-SQLITE_DIR=$(find "${TEMP}" -type d -name "sqlite-amalgamation-*" | head -1)
-cp "${SQLITE_DIR}/sqlite3.c" Sources/SQLiteCustom/
-cp "${SQLITE_DIR}/sqlite3.h" Sources/SQLiteCustom/
-cp "${SQLITE_DIR}/sqlite3ext.h" Sources/SQLiteCustom/
-
-echo "Downloading SQLite series extension..."
-curl -sL "https://www.sqlite.org/src/raw/ext/misc/series.c?ci=${SQLITE_TAG}" \
-    -o Sources/SQLiteExtensions/series.c
+echo "Building SQLite amalgamation..."
+curl -sL "https://github.com/sqlite/sqlite/archive/${SQLITE_COMMIT}.tar.gz" \
+    | tar -xz -C "${TEMP}"
+SQLITE_SRC="${TEMP}/sqlite-${SQLITE_COMMIT}"
+(cd "${SQLITE_SRC}" && ./configure --quiet && make -j sqlite3.c)
+cp "${SQLITE_SRC}/sqlite3.c" Sources/SQLiteCustom/
+cp "${SQLITE_SRC}/sqlite3.h" Sources/SQLiteCustom/
+cp "${SQLITE_SRC}/sqlite3ext.h" Sources/SQLiteCustom/
+cp "${SQLITE_SRC}/ext/misc/series.c" Sources/SQLiteExtensions/
 
 echo "Downloading SQLiteData..."
 curl -sL "https://github.com/pointfreeco/sqlite-data/archive/${SQLITEDATA_COMMIT}.tar.gz" \

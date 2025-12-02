@@ -6,6 +6,14 @@
       "customType": "regex",
       "fileMatch": ["^scripts/setup\\.sh$"],
       "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nSQLITE_COMMIT=\"\\$\\{SQLITE_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": [
         "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nGRDB_COMMIT=\"\\$\\{GRDB_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
       ],
       "datasourceTemplate": "github-tags"
