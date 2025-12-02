@@ -5,6 +5,7 @@ set -eu
 GRDB_VERSION="${GRDB_VERSION:-v7.8.0}"
 SQLITE_VERSION="${SQLITE_VERSION:-3510100}"
 SQLITE_YEAR="${SQLITE_YEAR:-2025}"
+SQLITE_SHA3="${SQLITE_SHA3:-856b52ffe7383d779bb86a0ed1ddc19c41b0e5751fa14ce6312f27534e629b64}"
 SQLITEDATA_VERSION="${SQLITEDATA_VERSION:-1.3.0}"
 USEARCH_VERSION="${USEARCH_VERSION:-v2.21.3}"
 SQLEAN_VERSION="${SQLEAN_VERSION:-0.27.1}"
@@ -43,6 +44,8 @@ cp "${TEMP}"/GRDB.swift-*/LICENSE Sources/GRDB/LICENSE
 echo "Downloading SQLite..."
 curl -sL "https://www.sqlite.org/${SQLITE_YEAR}/sqlite-amalgamation-${SQLITE_VERSION}.zip" \
     -o "${TEMP}/sqlite.zip"
+openssl dgst -sha3-256 "${TEMP}/sqlite.zip" | grep -q "${SQLITE_SHA3}" \
+    || { echo "Error: SQLite SHA3-256 mismatch!"; exit 1; }
 unzip -q "${TEMP}/sqlite.zip" -d "${TEMP}"
 SQLITE_DIR=$(find "${TEMP}" -type d -name "sqlite-amalgamation-*" | head -1)
 cp "${SQLITE_DIR}/sqlite3.c" Sources/SQLiteCustom/
