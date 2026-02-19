@@ -1,5 +1,3 @@
 .build/
 .DS_Store
 .swiftpm/
-Sources/
-sqlite-android-custom/

@@ -1,0 +1,39 @@
+name: Update sources
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/setup.sh'
+      - 'scripts/setup-android.sh'
+
+permissions: {}
+
+jobs:
+  update-sources:
+    name: Update vendored sources
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+        with:
+          app-id: ${{ secrets.PUSH_O_MATIC_APP_ID }}
+          private-key: ${{ secrets.PUSH_O_MATIC_APP_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - name: Install Tcl
+        run: sudo apt-get install -y tcl
+
+      - name: Setup sources
+        run: scripts/setup.sh
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
+        with:
+          default_author: github_actions
+          message: 'chore: update vendored sources'
