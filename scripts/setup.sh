@@ -3,19 +3,19 @@
 set -eu
 
 # renovate: datasource=github-tags depName=sqlite/sqlite
-SQLITE_COMMIT="${SQLITE_COMMIT:-a1de06a4c639a5d741b2b424e5dfea45eaa30e70}" # version-3.51.1
+SQLITE_COMMIT="${SQLITE_COMMIT:-ba76c160c735437de974c6ea24c890a663214c6b}" # version-3.51.2
 
 # renovate: datasource=github-tags depName=groue/GRDB.swift
-GRDB_COMMIT="${GRDB_COMMIT:-18497b68fdbb3a09528d260a0a0e1e7e61c8c53d}" # v7.8.0
+GRDB_COMMIT="${GRDB_COMMIT:-36e30a6f1ef10e4194f6af0cff90888526f0c115}" # v7.10.0
 
 # renovate: datasource=github-tags depName=pointfreeco/sqlite-data
-SQLITEDATA_COMMIT="${SQLITEDATA_COMMIT:-b66b894b9a5710f1072c8eb6448a7edfc2d743d9}" # 1.3.0
+SQLITEDATA_COMMIT="${SQLITEDATA_COMMIT:-5de18896e7a0358084bb4e3c83f7227500ba029b}" # 1.5.2
 
 # renovate: datasource=github-tags depName=unum-cloud/USearch
-USEARCH_COMMIT="${USEARCH_COMMIT:-aaf4949515d30f5f466e65f8f29316db84a59541}" # v2.21.3
+USEARCH_COMMIT="${USEARCH_COMMIT:-40d127f472e9073875566f0e9308c0302b89100a}" # v2.24.0
 
 # renovate: datasource=github-tags depName=nalgeon/sqlean
-SQLEAN_COMMIT="${SQLEAN_COMMIT:-94d8934683ee079a3e8639a7d8445f8b1ea52e36}" # 0.27.1
+SQLEAN_COMMIT="${SQLEAN_COMMIT:-0e2985467a5da3d7641447616609f8a8b8665b0a}" # 0.28.1
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
