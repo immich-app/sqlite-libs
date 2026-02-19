@@ -19,8 +19,9 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-collections", from: "1.0.0"),
         .package(url: "https://github.com/pointfreeco/swift-concurrency-extras", from: "1.0.0"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.9.0"),
+        .package(url: "https://github.com/pointfreeco/swift-perception", from: "2.0.0"),
         .package(url: "https://github.com/pointfreeco/swift-sharing", from: "2.3.0"),
-        .package(url: "https://github.com/pointfreeco/swift-structured-queries", from: "0.24.0"),
+        .package(url: "https://github.com/pointfreeco/swift-structured-queries", from: "0.30.0"),
         .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", from: "1.5.0"),
     ],
     targets: [
@@ -95,7 +96,6 @@ let package = Package(
                 .define("SQLITE_ENABLE_SNAPSHOT"),
                 .define("SQLITE_ENABLE_FTS5"),
                 .define("SQLITE_ENABLE_PREUPDATE_HOOK"),
-                .define("GRDBCUSTOMSQLITE"),
                 .unsafeFlags(["-O"]),
             ]
         ),
@@ -138,6 +138,7 @@ let package = Package(
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "IssueReporting", package: "xctest-dynamic-overlay"),
                 .product(name: "OrderedCollections", package: "swift-collections"),
+                .product(name: "Perception", package: "swift-perception"),
                 .product(name: "Sharing", package: "swift-sharing"),
                 .product(name: "StructuredQueriesSQLite", package: "swift-structured-queries"),
             ],
