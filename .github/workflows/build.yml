@@ -1,0 +1,76 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup JDK
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
+
+      - name: Install Tcl
+        run: sudo apt-get install -y tcl
+
+      - name: Setup sources
+        run: scripts/setup.sh
+
+      - name: Build AAR
+        working-directory: sqlite-android-custom
+        run: ./gradlew :sqlite-android:assembleRelease
+
+      - name: Upload AAR
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: sqlite-android-release
+          path: sqlite-android-custom/sqlite-android/build/outputs/aar/sqlite-android-release.aar
+
+  build-ios:
+    name: Build iOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Cache Swift PM
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: .build
+          key: ${{ runner.os }}-swiftpm-${{ hashFiles('Package.resolved') }}
+          restore-keys: ${{ runner.os }}-swiftpm-
+
+      - name: Install Tcl
+        run: brew install tcl-tk
+
+      - name: Setup sources
+        run: scripts/setup.sh
+
+      - name: Build Swift Package
+        run: swift build -c release
