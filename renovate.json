@@ -47,7 +47,8 @@
     {
       "matchManagers": ["regex"],
       "groupName": "vendored dependencies",
-      "schedule": ["before 9am on monday"]
+      "schedule": ["before 9am on monday"],
+      "semanticCommitType": "fix"
     }
   ]
 }
