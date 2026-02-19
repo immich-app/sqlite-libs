@@ -18,7 +18,7 @@ echo "Android directory: $ANDROID_DIR"
 echo "Cloning sqlite-android..."
 rm -rf "$ANDROID_DIR"
 git clone "$SQLITE_ANDROID_REPO" "$ANDROID_DIR"
-rm -rf "$ANDROID_DIR/.git"
+rm -rf "$ANDROID_DIR/.git" "$ANDROID_DIR/.github"
 
 JNI_DIR="$ANDROID_DIR/sqlite-android/src/main/jni"
 SQLITE_DIR="$JNI_DIR/sqlite"
