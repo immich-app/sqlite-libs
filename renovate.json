@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nSQLITE_COMMIT=\"\\$\\{SQLITE_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nGRDB_COMMIT=\"\\$\\{GRDB_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nSQLITEDATA_COMMIT=\"\\$\\{SQLITEDATA_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nUSEARCH_COMMIT=\"\\$\\{USEARCH_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^scripts/setup\\.sh$"],
+      "matchStrings": [
+        "# renovate: datasource=github-tags depName=(?<depName>[^\\s]+)\\nSQLEAN_COMMIT=\"\\$\\{SQLEAN_COMMIT:-(?<currentDigest>[a-f0-9]+)\\}\" # (?<currentValue>.+)"
+      ],
+      "datasourceTemplate": "github-tags"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["regex"],
+      "groupName": "vendored dependencies",
+      "schedule": ["before 9am on monday"],
+      "semanticCommitType": "fix"
+    }
+  ]
+}

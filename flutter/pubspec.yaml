@@ -2,7 +2,7 @@ name: sqlite3_flutter_libs
 description: >-
   Flutter plugin providing custom SQLite build with extensions (FTS5, USearch, SQLean).
   Drop-in replacement for sqlite3_flutter_libs.
-version: 0.5.40
+version: 0.0.1 # x-release-please-version
 
 homepage: https://github.com/immich-app/sqlite-libs
 
