@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'sqlite3_flutter_libs'
-  s.version          = '0.0.1' # x-release-please-version
+  s.version          = '0.1.0' # x-release-please-version
   s.summary          = 'Custom SQLite build with extensions for Flutter'
   s.description      = <<-DESC
 Flutter plugin providing a custom SQLite build with FTS5, USearch vector search,
