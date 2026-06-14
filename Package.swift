@@ -16,7 +16,7 @@ let package = Package(
         .library(name: "SQLiteData", targets: ["SQLiteData"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-collections", from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-collections", from: "1.6.0"),
         .package(url: "https://github.com/pointfreeco/swift-concurrency-extras", from: "1.0.0"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.9.0"),
         .package(url: "https://github.com/pointfreeco/swift-perception", from: "2.0.0"),
